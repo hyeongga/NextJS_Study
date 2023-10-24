@@ -5,20 +5,24 @@
 import Seo from "@/components/Seo";
 import Link from "next/link";
 import { useRouter } from "next/router";
+//useRouter사용시 URL을 string, 객체로 전송 가능
 
 export default function Home({ results }) {
   const router = useRouter();
-  const onClick = (id) => {
-    //push사용시 URL을 string, 객체로 전송 가능
+  const onClick = (id, title) => {
     //router.push(`/movies/${id}`); // <- string
-    router.push({
-      pathname: `/movies/${id}`,
-      query: {
-        id,
-        title: "potataos",
-      },
-    }); //object
+    router.push(
+      //객체 ; 정보 누출은 예방하고 콘솔창에는 보이게 할 수 있음
+      {
+        pathname: `/movies/${id}`,
+        query: {
+          title,
+        },
+      }, //URL정보
+      `/movies/${id}` //as 옵션 : masks url for the browser
+    );
   };
+
   return (
     <div className="container">
       <Seo title="Home" />
@@ -26,7 +30,7 @@ export default function Home({ results }) {
       {results?.map((movie) => (
         <div
           onClick={() => {
-            onClick(movie.id);
+            onClick(movie.id, movie.original_title);
           }}
           className="movie"
           key={movie.id}
