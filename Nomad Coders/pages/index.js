@@ -10,17 +10,7 @@ import { useRouter } from "next/router";
 export default function Home({ results }) {
   const router = useRouter();
   const onClick = (id, title) => {
-    //router.push(`/movies/${id}`); // <- string
-    router.push(
-      //객체 ; 정보 누출은 예방하고 콘솔창에는 보이게 할 수 있음
-      {
-        pathname: `/movies/${id}`,
-        query: {
-          title,
-        },
-      }, //URL정보
-      `/movies/${id}` //as 옵션 : masks url for the browser
-    );
+    router.push(`/movies/${title}/${id}`);
   };
 
   return (
@@ -37,7 +27,10 @@ export default function Home({ results }) {
         >
           <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
           <h4>
-            <Link href={`/movies/${movie.id}`} key={movie.id}>
+            <Link
+              href={`/movies/${movie.original_title}/${movie.id}`}
+              key={movie.id}
+            >
               {movie.original_title}
             </Link>
           </h4>
