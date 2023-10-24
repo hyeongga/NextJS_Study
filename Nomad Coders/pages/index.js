@@ -3,16 +3,40 @@
 // pages폴더안에 작성해야함. export default 작성.
 
 import Seo from "@/components/Seo";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Home({ results }) {
+  const router = useRouter();
+  const onClick = (id) => {
+    //push사용시 URL을 string, 객체로 전송 가능
+    //router.push(`/movies/${id}`); // <- string
+    router.push({
+      pathname: `/movies/${id}`,
+      query: {
+        id,
+        title: "potataos",
+      },
+    }); //object
+  };
   return (
     <div className="container">
       <Seo title="Home" />
 
       {results?.map((movie) => (
-        <div className="movie" key={movie.id}>
+        <div
+          onClick={() => {
+            onClick(movie.id);
+          }}
+          className="movie"
+          key={movie.id}
+        >
           <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-          <h4>{movie.original_title}</h4>
+          <h4>
+            <Link href={`/movies/${movie.id}`} key={movie.id}>
+              {movie.original_title}
+            </Link>
+          </h4>
         </div>
       ))}
       <style jsx>{`
